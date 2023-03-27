@@ -221,20 +221,8 @@ bool wakeupHandler()
     DEBUG_PRINTLN(millis());
     DEBUG_PRINT(F("next run:\t"));
     DEBUG_PRINTLN(wakeuptimer);
-    if (wakeupPinActive)
-    {
-      wakeupPinActive = false;
-      wakeuptimer = millis() + WAKEUP_INTERVAL;
-      digitalWrite(WAKEUP_PIN, LOW);
-    }
-    else
-    {
-      wakeupPinActive = true;
-      wakeuptimer = millis() + WAKEUP_DURATION;
-      digitalWrite(WAKEUP_PIN, HIGH);
-    }
-    DEBUG_PRINT(F("PIN IS NOW:\t"));
-    DEBUG_PRINTLN(digitalRead(WAKEUP_PIN));
+    wakeuptimer = millis() + WAKEUP_INTERVAL;
+    digitalWrite(WAKEUP_PIN, HIGH);
   }
   return true;
 }
