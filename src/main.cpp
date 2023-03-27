@@ -854,6 +854,16 @@ void mqttcallback(char *topic, unsigned char *payload, unsigned int length)
       mqttclient.publish(topicBuilder(buff, "Device_Control/Pack_ChargeFET"), "false", false);
     }
   }
+
+  // set Wakeup PIN to low
+  if (strcmp(topic, topicBuilder(buff, "Device_Control/Wakeup")) == 0)
+  {
+    if (_settings.data.wakeupEnable && messageTemp == "false")
+    {
+      DEBUG_PRINTLN(F("MQTT Callback: switching Wakeup off"));
+      digitalWrite(WAKEUP_PIN, LOW);
+    }
+  }
   updateProgress = false;
 }
 
@@ -879,6 +889,8 @@ bool connectMQTT()
         mqttclient.subscribe(topicBuilder(buff, "Device_Control/Pack_SOC"));
         if (_settings.data.relaisFunction == 4)
           mqttclient.subscribe(topicBuilder(buff, "Device_Control/Relais"));
+        if (_settings.data.wakeupEnable)
+          mqttclient.subscribe(topicBuilder(buff, "Device_Control/Wakeup"));
       }
       else
       {
